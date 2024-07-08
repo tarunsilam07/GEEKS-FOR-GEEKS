@@ -1,9 +1,9 @@
 <h2><a href="https://www.geeksforgeeks.org/problems/missing-number-in-array1416/1?page=1&sprint=a663236c31453b969852f9ea22507634&sprint=a663236c31453b969852f9ea22507634&sortBy=submissions">Missing in Array</a></h2><h3>Difficulty Level : Difficulty: Easy</h3><hr><div class="problems_problem_content__Xm_eO"><p><span style="font-size: 18px;">Given an array of size <strong>n-1</strong>&nbsp;such that it only contains distinct integers in the range of&nbsp;<strong>1 to n</strong>. Return the missing element.</span></p>
 <p><span style="font-size: 18px;"><strong>Examples:</strong></span></p>
-<pre><span style="font-size: 18px;"><strong>Input: </strong>n = 5, arr[] = {1,2,3,5}
+<pre><span style="font-size: 18px;"><strong>Input: </strong>n = 5, arr[] = [1,2,3,5]
 <strong>Output: </strong>4</span>
 <strong><span style="font-size: 14pt;">Explanation : </span></strong><span style="font-size: 14pt;"><span style="font-size: 12pt;">All the numbers from 1 to 5 are present except 4.</span></span></pre>
-<pre><span style="font-size: 18px;"><strong>Input: </strong>n = 2, arr[] = {1}
+<pre><span style="font-size: 18px;"><strong>Input: </strong>n = 2, arr[] = [1]
 <strong>Output: </strong>2</span>
 <strong><span style="font-size: 14pt;">Explanation : </span></strong><span style="font-size: 14pt;"><span style="font-size: 12pt;">All the numbers from 1 to 2 are present except 2.</span></span></pre>
 <p><span style="font-size: 18px;"><strong>Expected Time Complexity:</strong> O(n)<br><strong>Expected Auxiliary Space:</strong>&nbsp;O(1)</span></p>
