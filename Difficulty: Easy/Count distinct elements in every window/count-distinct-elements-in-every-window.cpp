@@ -1,58 +1,62 @@
 //{ Driver Code Starts
+// Initial Template for C++
 #include <bits/stdc++.h>
 using namespace std;
 
 
-
 // } Driver Code Ends
 
-class Solution{
+class Solution {
   public:
-    vector <int> countDistinct (int arr[], int n, int k)
-    {
-        vector<int>ans;
-        int l=0;
-        int r=k-1;
+    vector<int> countDistinct(vector<int> &arr, int k) {
         unordered_map<int,int>mpp;
-        for(int i=l;i<=r;i++)
-        {
+        vector<int>ans;
+        int cnt=0;
+        for(int i=0;i<k;i++){
             mpp[arr[i]]++;
         }
         ans.push_back(mpp.size());
-        r=k;
-        while(r<n)
-        {
-           mpp[arr[r]]++;
-           mpp[arr[l]]--;
-           if(mpp[arr[l]]<1)
-           mpp.erase(arr[l]);
-           ans.push_back(mpp.size());
-           r++;
-           l++;
+        int n=arr.size();
+        for(int i=k;i<n;i++){
+            mpp[arr[i-k]]--;
+            if(mpp[arr[i-k]]==0)
+            mpp.erase(arr[i-k]);
+            mpp[arr[i]]++;
+            ans.push_back(mpp.size());
         }
         return ans;
     }
 };
 
 //{ Driver Code Starts.
-int main()
-{
+
+int main() {
+
     int t;
     cin >> t;
-    while (t--)
-    {
-
-        int n, k;
-        cin >> n >> k;
-        int a[n];
-        for (int i = 0; i < n; i++) 
-        	cin >> a[i];
+    cin.ignore();
+    while (t--) {
+        vector<int> arr;
+        string input;
+        getline(cin, input);
+        stringstream ss(input);
+        int number;
+        while (ss >> number) {
+            arr.push_back(number);
+        }
+        string ks;
+        getline(cin, ks);
+        int k = stoi(ks);
         Solution obj;
-        vector <int> result = obj.countDistinct(a, n, k);
-        for (int i : result) 
-        	cout << i << " ";
+        vector<int> res = obj.countDistinct(arr, k);
+        for (auto it : res)
+            cout << it << " ";
         cout << endl;
+        cout << "~"
+             << "\n";
     }
+
     return 0;
 }
+
 // } Driver Code Ends
