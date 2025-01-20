@@ -1,132 +1,135 @@
 //{ Driver Code Starts
-#include<iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
-/* Link list Node */
-struct Node
-{
+struct Node {
     int data;
     struct Node *next;
-    
-    Node(int x)
-    {
+
+    Node(int x) {
         data = x;
         next = NULL;
     }
 };
 
-Node* sortedMerge(struct Node* a, struct Node* b);
-
-/* Function to print Nodes in a given linked list */
-void printList(struct Node *n)
-{
-    while (n!=NULL)
-    {
-        cout << n->data << " ";
-        n = n->next;
+void printList(struct Node *head) {
+    struct Node *temp = head;
+    while (temp != NULL) {
+        cout << temp->data << ' ';
+        temp = temp->next;
     }
-    cout << endl;
+    cout << "\n~\n";
 }
 
-/* Driver program to test above function*/
-int main()
-{
-    int t;
-    cin>>t;
-    while(t--)
-    {
-        int n,m;
-        cin>>n>>m;
-
-        int data;
-        cin>>data;
-        struct Node *head1 = new Node(data);
-        struct Node *tail1 = head1;
-        for (int i = 1; i < n; ++i)
-        {
-            cin>>data;
-            tail1->next = new Node(data);
-            tail1 = tail1->next;
-        }
-
-        cin>>data;
-        struct Node *head2 = new Node(data);
-        struct Node *tail2 = head2;
-        for(int i=1; i<m; i++)
-        {
-            cin>>data;
-            tail2->next = new Node(data);
-            tail2 = tail2->next;
-        }
-
-        Node *head = sortedMerge(head1, head2);
-        printList(head);
+Node *insertSorted(Node *head, int data) {
+    Node *new_node = new Node(data);
+    if (!head || head->data >= data) {
+        new_node->next = head;
+        return new_node;
     }
-    return 0;
+
+    Node *current = head;
+    while (current->next && current->next->data < data) {
+        current = current->next;
+    }
+    new_node->next = current->next;
+    current->next = new_node;
+    return head;
 }
+
 
 // } Driver Code Ends
-
-
- 
-
 /* Link list Node
 struct Node {
   int data;
   struct Node *next;
-  
+
   Node(int x) {
     data = x;
     next = NULL;
   }
 };
 */
-//Function to merge two sorted linked list.
-Node* sortedMerge(Node* head1, Node* head2)  
-{  
-   Node* temp1=head1;
-   Node* temp2=head2;
-   Node* dummy=new Node(-1);
-   Node* curr=dummy;
-   while(temp1!=NULL && temp2!=NULL)
-   {
-       if(temp1->data<temp2->data)
+class Solution {
+  public:
+    Node* sortedMerge(Node* head1, Node* head2) {
+       Node* temp1=head1;
+       Node* temp2=head2;
+       Node* dummy=new Node(-1);
+       Node* curr=dummy;
+       while(temp1!=NULL && temp2!=NULL)
        {
-           Node* newnode=new Node(temp1->data);
-           curr->next=newnode;
-           curr=newnode;
-           if(temp1)temp1=temp1->next;
+           if(temp1->data<temp2->data)
+           {
+               Node* newnode=new Node(temp1->data);
+               curr->next=newnode;
+               curr=newnode;
+               if(temp1)temp1=temp1->next;
+           }
+           else if(temp1->data>temp2->data)
+           {
+               Node* newnode=new Node(temp2->data);
+               curr->next=newnode;
+               curr=newnode;
+               if(temp2)temp2=temp2->next;
+           }
+           else
+           {
+               Node* newnode=new Node(temp1->data);
+               curr->next=newnode;
+               curr=newnode;
+               if(temp1)temp1=temp1->next;
+               Node* newnode1=new Node(temp2->data);
+               curr->next=newnode1;
+               curr=newnode1;
+               if(temp2)temp2=temp2->next;
+           }
        }
-       else if(temp1->data>temp2->data)
+       while(temp1)
        {
-           Node* newnode=new Node(temp2->data);
-           curr->next=newnode;
-           curr=newnode;
-           if(temp2)temp2=temp2->next;
+           curr->next=temp1;
+           curr=temp1;
+           temp1=temp1->next;
        }
-       else
+       while(temp2)
        {
-           Node* newnode=new Node(temp1->data);
-           curr->next=newnode;
-           curr=newnode;
-           if(temp1)temp1=temp1->next;
-           Node* newnode1=new Node(temp2->data);
-           curr->next=newnode1;
-           curr=newnode1;
-           if(temp2)temp2=temp2->next;
+           curr->next=temp2;
+           curr=temp2;
+           temp2=temp2->next;
        }
-   }
-   while(temp1)
-   {
-       curr->next=temp1;
-       curr=temp1;
-       temp1=temp1->next;
-   }
-   while(temp2)
-   {
-       curr->next=temp2;
-       curr=temp2;
-       temp2=temp2->next;
-   }
-   return dummy->next;
-}  
+       return dummy->next;
+    }
+};
+
+//{ Driver Code Starts.
+
+// Driver program to test above functions
+int main() {
+    int T;
+    cin >> T;
+    cin.ignore();
+    while (T--) {
+        int n1, n2, tmp;
+        Node *head1 = nullptr, *head2 = nullptr;
+        string input1, input2;
+
+        getline(cin, input1); // Read the entire line for the LL1 elements
+        stringstream ss1(input1);
+        while (ss1 >> tmp) {
+            head1 = insertSorted(head1, tmp);
+        }
+
+        getline(cin, input2); // Read the entire line for the LL2 elements
+        stringstream ss2(input2);
+        while (ss2 >> tmp) {
+            head2 = insertSorted(head2, tmp);
+        }
+
+        Solution obj;
+        Node *head = obj.sortedMerge(head1, head2);
+        printList(head);
+    }
+    return 0;
+}
+
+// } Driver Code Ends
