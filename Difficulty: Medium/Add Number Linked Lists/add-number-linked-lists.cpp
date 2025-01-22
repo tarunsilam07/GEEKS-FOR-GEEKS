@@ -1,45 +1,54 @@
 //{ Driver Code Starts
-// driver
-
-#include <bits/stdc++.h>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 using namespace std;
 
 /* Linked list Node */
 struct Node {
     int data;
     struct Node* next;
+
     Node(int x) {
         data = x;
         next = NULL;
     }
 };
 
-struct Node* buildList(int size)
-{
-    int val;
-    cin>> val;
-    
+Node* buildList() {
+    vector<int> arr;
+    string input;
+    getline(cin, input);
+    stringstream ss(input);
+    int number;
+    while (ss >> number) {
+        arr.push_back(number);
+    }
+    if (arr.empty()) {
+        return NULL;
+    }
+    int val = arr[0];
+    int size = arr.size();
+
     Node* head = new Node(val);
     Node* tail = head;
-    
-    for(int i=0; i<size-1; i++)
-    {
-        cin>> val;
+
+    for (int i = 1; i < size; i++) {
+        val = arr[i];
         tail->next = new Node(val);
         tail = tail->next;
     }
-    
+
     return head;
 }
 
-void printList(Node* n)
-{
-    while(n)
-    {
-        cout<< n->data << " ";
+void printList(Node* n) {
+    while (n) {
+        cout << n->data << " ";
         n = n->next;
     }
-    cout<< endl;
+    cout << endl;
 }
 
 
@@ -131,24 +140,21 @@ class Solution
 };
 
 
+
 //{ Driver Code Starts.
 
-int main()
-{
+int main() {
     int t;
-    cin>>t;
-    while(t--)
-    {
-        int n, m;
-        
-        cin>>n;
-        Node* num1 = buildList(n);
-        
-        cin>>m;
-        Node* num2 = buildList(m);
+    cin >> t;
+    cin.ignore(); // To ignore the newline character after the integer input
+
+    while (t--) {
+        Node* num1 = buildList();
+        Node* num2 = buildList();
         Solution ob;
-        Node* res = ob.addTwoLists(num1,num2);
+        Node* res = ob.addTwoLists(num1, num2);
         printList(res);
+        cout << "~" << endl;
     }
     return 0;
 }
