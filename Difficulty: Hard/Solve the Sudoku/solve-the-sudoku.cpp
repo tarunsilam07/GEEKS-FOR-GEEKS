@@ -1,104 +1,123 @@
 //{ Driver Code Starts
 #include <bits/stdc++.h>
 using namespace std;
-// UNASSIGNED is used for empty cells in sudoku grid 
-#define UNASSIGNED 0  
-
-// N is used for the size of Sudoku grid.  
-// Size will be NxN  
-#define N 9  
 
 
 // } Driver Code Ends
-class Solution 
-{
+
+class Solution {
+
     public:
-bool isValid(int grid[N][N], int row, int col, int num) {
-    // Check the row
-    for (int x = 0; x < N; x++)
-        if (grid[row][x] == num)
-            return false;
-
-    // Check the column
-    for (int x = 0; x < N; x++)
-        if (grid[x][col] == num)
-            return false;
-
-    // Check the 3x3 sub-box
-    int startRow = row - row % 3, startCol = col - col % 3;
-    for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-            if (grid[i + startRow][j + startCol] == num)
-                return false;
-
-    return true;
-}
-
-// Function to solve the Sudoku
-bool SolveSudoku(int grid[N][N]) {
-    int row = -1, col = -1;
-    bool isEmpty = true;
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            if (grid[i][j] == 0) {
-                row = i;
-                col = j;
-                isEmpty = false;
-                break;
-            }
-        }
-        if (!isEmpty)
-            break;
-    }
-
-    // No empty space left
-    if (isEmpty)
-        return true;
-
-    for (int num = 1; num <= 9; num++) {
-        if (isValid(grid, row, col, num)) {
-            grid[row][col] = num;
-            if (SolveSudoku(grid))
+    
+    bool solved(vector<vector<int>> &mat, int r, int c, vector<vector<bool>> &rows, vector<vector<bool>> &cols,vector<vector<vector<bool>>> &box){
+        // move to next row
+        if(c==9)
+            return solved(mat,r+1,0,rows,cols,box);
+        // every other row is filled successfully
+        if(r==9)
+            return true;
+        // if vacant cell move forward
+        if(mat[r][c]!=0)
+            return solved(mat,r,c+1,rows,cols,box);
+        
+        // put 1-9 possible values
+        for(int k=1; k<10; k++){
+            // if k in row, col or box, don't put it in cell
+            if(rows[r][k] || cols[c][k] || box[r/3][c/3][k] )
+                continue;
+                
+            // set K as present, in current row, col and (3x3) box
+            rows[r][k]= true;
+            cols[c][k]= true;
+            box[r/3][c/3][k]= true;
+            // set cell as k
+            mat[r][c]=k;
+            
+            // once solved don't try other numbers... 
+            // if backtracks then matrix values will change (passed by reference)
+            if(solved(mat,r,c+1,rows,cols,box))
                 return true;
-            grid[row][col] = 0; // Backtrack
+            
+            // reset k from row, col, box if putting k didn't solve sudoku
+            rows[r][k]= false;
+            cols[c][k]= false;
+            box[r/3][c/3][k]= false;
+            
         }
+        
+        // reset cell if nothing works
+        mat[r][c]=0;
+        return false;
     }
-    return false; // Trigger backtracking
-}
-
-// Function to print the Sudoku grid
-void printGrid(int grid[N][N]) {
-    for (int r = 0; r < N; r++) {
-        for (int d = 0; d < N; d++) {
-            cout << grid[r][d] << " ";
-        }
+    
+  
+    // Function to find a solved Sudoku.
+    void solveSudoku(vector<vector<int>> &mat) {
+        // code here
+        
+        // rows or cols[i][k] checks if k is present in i th row or col
+        vector<vector<bool>> rows(9,vector<bool>(10,false));
+        vector<vector<bool>> cols(9,vector<bool>(10,false));
+        // box[i][j][k]  checks if k is present in i,j box of size 3x3
+        vector<vector<vector<bool>>> box(3,vector<vector<bool>>(3,vector<bool>(10,false)));
+       
+       // initialize above for already present values
+       for(int i=0; i<9; i++){
+           for(int j=0; j<9; j++){
+               int k = mat[i][j];
+               if(k){
+                   rows[i][k]= true;
+                   cols[j][k]= true;
+                   box[i/3][j/3][k]= true;
+               }
+           }
+       }
+       
+        solved(mat,0,0,rows,cols,box);
+ 
     }
-}
 };
+ 
+
 
 //{ Driver Code Starts.
 
+vector<int> inputLine() {
+    string str;
+    getline(cin, str);
+    stringstream ss(str);
+    int num;
+    vector<int> res;
+    while (ss >> num) {
+        res.push_back(num);
+    }
+    return res;
+}
+
 int main() {
-	int t;
-	cin>>t;
-	while(t--)
-	{
-		int grid[N][N];
-		
-		for(int i=0;i<9;i++)
-		    for(int j=0;j<9;j++)
-		        cin>>grid[i][j];
-		        
-		Solution ob;
-		
-		if (ob.SolveSudoku(grid) == true)  
-            ob.printGrid(grid);  
-        else
-            cout << "No solution exists";  
-        
-        cout<<endl;
-	}
-	
-	return 0;
+    int t;
+    cin >> t;
+    cin.ignore();
+    while (t--) {
+        vector<vector<int>> grid;
+        for (int i = 0; i < 9; i++) {
+            vector<int> v = inputLine();
+            grid.push_back(v);
+        }
+
+        Solution ob;
+
+        ob.solveSudoku(grid);
+
+        for (auto v : grid) {
+            for (auto elem : v) {
+                cout << elem << " ";
+            }
+            cout << endl;
+        }
+
+        cout << "~" << endl;
+    }
+    return 0;
 }
 // } Driver Code Ends
